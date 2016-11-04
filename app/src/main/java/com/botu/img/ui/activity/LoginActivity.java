@@ -1,4 +1,4 @@
-package com.botu.img.ui;
+package com.botu.img.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -27,7 +27,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.botu.img.R;
-import com.botu.img.ui.activity.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;

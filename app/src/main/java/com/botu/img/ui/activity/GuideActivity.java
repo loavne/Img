@@ -77,7 +77,7 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
         btEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SpUtils.setBoolean(GuideActivity.this, "ifFirstEnter", false); //设置不是第一次启动
+                SpUtils.setBoolean(GuideActivity.this, "isFirstEnter", false); //设置不是第一次启动
                 //进入主界面
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();

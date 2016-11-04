@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.botu.img.R;
-
 /**
  * Activity基类
  * @author: swolf
@@ -55,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity{
      */
     public void addStatusBarView(int color) {
         View view = new View(this);
-        view.setBackgroundColor(getResources().getColor(R.color.colorSplash));
+        view.setBackgroundColor(getResources().getColor(color));
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight());
         //获取ViewGroup
         ViewGroup decorView = (ViewGroup) findViewById(android.R.id.content);
