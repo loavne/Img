@@ -48,13 +48,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         radioGroup.setOnCheckedChangeListener(this);
         mToolbar.setOnMenuItemClickListener(this);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         fragmentCommit(0);
     }
+
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int position) {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(), container, false);
-        initView();
+        View view = inflater.inflate(getLayoutId(), null);
         return view;
     }
 
@@ -36,6 +34,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        initView();
         initData();
     }
 
@@ -46,7 +45,6 @@ public abstract class BaseFragment extends Fragment {
         // 当Fragment不可见的时候，需要隐藏相应的视图，不然会使界面重叠在一起。
         if (this.getView() != null) {
             this.getView().setVisibility(menuVisible ? View.VISIBLE : View.GONE);
-            Log.e("hlh", "setMenuVisibility: " + menuVisible);
         }
     }
 

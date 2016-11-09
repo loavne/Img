@@ -18,4 +18,14 @@
     <string name="tab_search">搜索</string>
     <string name="tab_person">我的</string>
     <string name="setting">设置</string>
+    <string name="nowlogin">立即登录</string>
+    <string name="forget_pw">忘记密码？</string>
+    <string name="register">注册</string>
+    <string name="use_thrid">使用第三方账号登录</string>
+    <string name="login">登录</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="favourite">收藏</string>
+    <string name="share">分享</string>
+    <string name="recent">浏览</string>
 </resources>

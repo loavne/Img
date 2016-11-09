@@ -1,12 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MatchMatch"
+    android:padding="@dimen/material_deisgn_padding_top_16">
 
-    <TextView
-        android:text="dddgadgadgasgdasg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dddddddddddddddd"/>
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/ll_login_from"
+        style="@style/WrapWrap"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/WrapWrap"
+            android:layout_above="@+id/ll_third_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/material_deisgn_padding_top_16"
+            android:text="@string/use_thrid"
+            android:textSize="@dimen/tv14"/>
+
+        <RelativeLayout
+            android:id="@+id/ll_third_login"
+            style="@style/MatchWrap"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/material_deisgn_padding_left_8">
+
+            <ImageView
+                android:id="@+id/iv_wx"
+                style="@style/WrapWrap"
+                android:layout_marginLeft="@dimen/material_deisgn_padding_left_8"
+                android:background="@drawable/icon_weixin"/>
+
+            <ImageView
+                android:id="@+id/iv_qq"
+                style="@style/WrapWrap"
+                android:layout_centerInParent="true"
+                android:background="@drawable/icon_qq"/>
+
+            <ImageView
+                android:id="@+id/iv_sina"
+                style="@style/WrapWrap"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/material_deisgn_padding_left_8"
+                android:background="@drawable/icon_weibo"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_userinfo_content"
+        style="@style/MatchWrap"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            style="@style/MatchWrap"
+            android:background="@color/gray">
+
+            <com.botu.sticklibrary.view.CircleImageView
+                android:id="@+id/iv_head"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/material_deisgn_padding_left_8"
+                android:background="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/WrapWrap"
+                android:layout_below="@+id/iv_head"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="16dp"
+                android:text="ADB"
+                android:textColor="@color/gray"
+                android:textSize="20sp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/material_deisgn_padding_top_16"
+            style="@style/MatchMatch">
+            <LinearLayout
+                android:id="@+id/ll_favourite"
+                style="@style/WrapWrap"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/my_favorite"/>
+
+                <TextView
+                    style="@style/WrapWrap"
+                    android:text="@string/favourite"
+                    android:textSize="@dimen/tv18"
+                    android:textColor="@color/gray"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_share"
+                style="@style/WrapWrap"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/my_share"/>
+
+                <TextView
+                    style="@style/WrapWrap"
+                    android:text="@string/share"
+                    android:textSize="@dimen/tv18"
+                    android:textColor="@color/gray"
+                    android:id="@+id/textView2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_recent"
+                style="@style/WrapWrap"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/my_recent"/>
+
+                <TextView
+                    style="@style/WrapWrap"
+                    android:text="@string/recent"
+                    android:textSize="@dimen/tv18"
+                    android:textColor="@color/gray"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+</FrameLayout>
