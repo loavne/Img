@@ -29,13 +29,6 @@ dependencies {
     compile 'com.lzy.net:okgo:2.0.0'
     testCompile 'junit:junit:4.12'
     compile project(':sticklibrary')
-    compile files('libs/MobCommons-2016.1102.1128.jar')
-    compile files('libs/MobTools-2016.1102.1128.jar')
-    compile files('libs/ShareSDK-Core-2.7.9.jar')
-    compile files('libs/ShareSDK-QQ-2.7.9.jar')
-    compile files('libs/ShareSDK-QZone-2.7.9.jar')
-    compile files('libs/ShareSDK-SinaWeibo-2.7.9.jar')
-    compile files('libs/ShareSDK-Wechat-2.7.9.jar')
-    compile files('libs/ShareSDK-Wechat-Core-2.7.9.jar')
-    compile files('libs/ShareSDK-Wechat-Moments-2.7.9.jar')
+    compile files('libs/libammsdk.jar')
+    compile 'com.google.code.gson:gson:2.8.0'
 }

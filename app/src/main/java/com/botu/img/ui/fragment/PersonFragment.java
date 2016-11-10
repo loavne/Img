@@ -1,26 +1,22 @@
 package com.botu.img.ui.fragment;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import com.botu.img.MyApp;
 import com.botu.img.R;
 import com.botu.img.utils.SpUtils;
-
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
 
 /**
  * 我的
  * @author: swolf
  * @date : 2016-11-03 09:58
  */
-public class PersonFragment extends BaseFragment implements View.OnClickListener, PlatformActionListener {
+public class PersonFragment extends BaseFragment implements View.OnClickListener{
 
     public static final String TAG = PersonFragment.class.getSimpleName();
 
@@ -32,8 +28,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private LinearLayout mFavourite;
     private LinearLayout mShare;
     private LinearLayout mRecent;
-    private Platform mPlatform;
-
 
     @Override
     protected int getLayoutId() {
@@ -42,7 +36,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initView() {
-        ShareSDK.initSDK(mActivity);
 
         //先判断是否登录过
         if (SpUtils.getBoolean(mActivity, "isLogin", false)) {
@@ -85,13 +78,11 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_wx:
-                authorize("WeChat");
+                loginWx();
                 break;
             case R.id.iv_sina:
-                authorize("SinaWeibo");
                 break;
             case R.id.iv_qq:
-                authorize("QQ");
                 break;
 
             case R.id.ll_favourite:
@@ -103,30 +94,14 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    public void authorize(String platformName) {
-
-        mPlatform = ShareSDK.getPlatform(platformName);
-        if (mPlatform == null) {
-            return;
+    private void loginWx() {
+        if (!MyApp.wxApi.isWXAppInstalled()) {
+            Toast.makeText(mActivity, "未安装", Toast.LENGTH_LONG);
         }
-        mPlatform.setPlatformActionListener(this);
-        mPlatform.SSOSetting(false);//此处设置为false，则在优先采用客户端授权的方法，设置true会采用网页方式
-        mPlatform.showUser(null);//获得用户数据
+        SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "com.botu.img";
+        MyApp.wxApi.sendReq(req);
     }
 
-    @Override
-    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        Log.e(TAG, "onComplete:  " + platform.getName());
-    }
-
-    @Override
-    public void onError(Platform platform, int i, Throwable throwable) {
-        Log.e(TAG, "onError: " );
-        throwable.printStackTrace();
-    }
-
-    @Override
-    public void onCancel(Platform platform, int i) {
-
-    }
 }
