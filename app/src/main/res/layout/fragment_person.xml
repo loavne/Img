@@ -58,6 +58,7 @@
                 android:id="@+id/iv_head"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/material_deisgn_padding_left_8"/>
 
