@@ -63,7 +63,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 String code = ((SendAuth.Resp) baseResp).code; //授权code
                 //发送请求获取access_token
                 getAccessToken(code);
-                finish();
+                WXEntryActivity.this.finish();
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = "发送取消";
@@ -132,7 +132,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         intent.putExtra("img", wxUserInfo.getHeadimgurl());
                         intent.putExtra("name", wxUserInfo.getNickname());
                         sendBroadcast(intent);
-                        finish();
+                        WXEntryActivity.this.finish();
                     }
 
                     @Override

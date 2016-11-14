@@ -1,6 +1,9 @@
 package com.botu.img.ui.fragment;
 
 import com.botu.img.R;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 /**
  * 主页
@@ -9,6 +12,8 @@ import com.botu.img.R;
  */
 public class HomeFragment extends BaseFragment{
 
+    private WebView mWebView;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_home;
@@ -16,10 +21,20 @@ public class HomeFragment extends BaseFragment{
 
     @Override
     protected void initView() {
+        mWebView = (WebView) mActivity.findViewById(R.id.webView);
     }
 
     @Override
     public void initData() {
-
+        mWebView.loadUrl("http://www.baidu.com");
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        mWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView webView, String s) {
+                webView.loadUrl(s);
+                return true;
+            }
+        });
     }
 }

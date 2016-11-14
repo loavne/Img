@@ -5,8 +5,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.botu.img.R;
+import com.botu.img.utils.DataCleanManager;
 import com.botu.img.utils.SpUtils;
 
 /**
@@ -15,7 +17,7 @@ import com.botu.img.utils.SpUtils;
  */
 public class SettingActivity extends BaseActivity implements View.OnClickListener {
 
-//    private SettingFragment mSettingFragment;
+    //    private SettingFragment mSettingFragment;
     private RelativeLayout clearCache;
     private TextView cacheSize;
     private TextView exit;
@@ -58,6 +60,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             exit.setVisibility(View.VISIBLE);
         }
 
+        //设置缓存大小
+        try {
+            String size = DataCleanManager.getCacheSize(this);
+            cacheSize.setText(size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         clearCache.setOnClickListener(this);
         exit.setOnClickListener(this);
 
@@ -77,11 +87,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_exit:
-                //清除缓存
+                //退出登录
                 SpUtils.removeKey(SettingActivity.this, "img");
                 SpUtils.removeKey(SettingActivity.this, "name");
                 SpUtils.setBoolean(SettingActivity.this, "isLogin", false); //设置为未登录
                 SettingActivity.this.finish();
+                break;
+           case R.id.rl_clear_cache:
+                //清除缓存
+                DataCleanManager.cleanAllCache(getApplicationContext());
+                Toast.makeText(this, "清理成功", Toast.LENGTH_SHORT).show();
+                cacheSize.setText("0.0B");
                 break;
         }
     }

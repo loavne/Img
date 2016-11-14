@@ -58,6 +58,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize">
         </activity>
+
+        <meta-data
+            android:name="QBSDKAppKey"
+            android:value="Air7mfs2ImoVGSyq1qClDK94" />
     </application>
 
 </manifest>

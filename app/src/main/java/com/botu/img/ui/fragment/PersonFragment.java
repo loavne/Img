@@ -1,5 +1,6 @@
 package com.botu.img.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -69,6 +71,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private Oauth2AccessToken mAccessToken;
 
     private int loginPlatform = 0;
+    private ProgressDialog mDialog;
 
     @Override
     protected int getLayoutId() {
@@ -136,11 +139,17 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    public void onDestroyView() {
+    public void onStop() {
+        //注销登录,以便下次登录
         if (mTencent != null) {
-            //注销登录
             mTencent.logout(mActivity);
         }
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        mActivity.unregisterReceiver(mReceiver);
         super.onDestroyView();
     }
 
@@ -185,12 +194,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void loginQQ() {
         loginPlatform = 1;
+        loginListener = new LoginIUiListener();
+        userInfoIUiListener = new UserInfoIUiListener();
+
         if (mTencent == null) {
             mTencent = Tencent.createInstance(IConstants.QQ_APP_ID, mActivity);
         }
-
-        loginListener = new LoginIUiListener();
-        userInfoIUiListener = new UserInfoIUiListener();
 
         if (!mTencent.isSessionValid()) {
             mTencent.login(mActivity, SCOPE, loginListener);
@@ -201,18 +210,24 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        initProgressDialog();
+        if (mDialog != null && !mDialog.isShowing()) {
+            mDialog.show();
+        }
+
         if (loginPlatform == 1) {
             //必须要有这句，不然不回调
             Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
             if (requestCode == Constants.REQUEST_LOGIN) {
                 if (resultCode == -1) {
                     Tencent.handleResultData(data, loginListener);
+                    //获取用户信息
                     UserInfo info = new UserInfo(mActivity, mTencent.getQQToken());
                     info.getUserInfo(userInfoIUiListener);
                 }
             }
         } else if (loginPlatform == 2) {
-            // SSO 授权回调
+            // SSO 授权回调+
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
             if (mSsoHandler != null) {
                 mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
@@ -221,8 +236,19 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     }
 
+    private void initProgressDialog() {
+        mDialog = new ProgressDialog(mActivity);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mDialog.setMessage("正在登录中...");
+    }
+
     //设置sp
     private void setSp(String img, String name) {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
         SpUtils.setBoolean(mActivity, "isLogin", true);
         SpUtils.setString(mActivity, "img", img);
         SpUtils.setString(mActivity, "name", name);
@@ -316,7 +342,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private RequestListener mRequestListener = new RequestListener() {
         @Override
         public void onComplete(String response) {
-            Log.e("hlh", "RequestListener-------onComplete: ");
             if (!TextUtils.isEmpty(response)) {
                 User user = User.parse(response);
                 setSp(user.profile_image_url, user.screen_name);
@@ -333,6 +358,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     class LoginBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            initProgressDialog();
             String img = intent.getStringExtra("img");
             String name = intent.getStringExtra("name");
             setSp(img, name);
