@@ -1,13 +1,19 @@
 package com.botu.img.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import java.util.List;
 
 /**
  * Activity基类
@@ -77,4 +83,46 @@ public abstract class BaseActivity extends AppCompatActivity{
         return statusBarHeight;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        FragmentManager fm = getSupportFragmentManager();
+        int index = requestCode >> 16;
+        if (index != 0) {
+            index--;
+            if (fm.getFragments() == null || index < 0
+                    || index >= fm.getFragments().size()) {
+                Log.w("hlh", "Activity result fragment index out of range: 0x"
+                        + Integer.toHexString(requestCode));
+                return;
+            }
+            Fragment frag = fm.getFragments().get(index);
+            if (frag == null) {
+                Log.w("hlh", "Activity result no fragment exists for index: 0x"
+                        + Integer.toHexString(requestCode));
+            } else {
+                handleResult(frag, requestCode, resultCode, data);
+            }
+            return ;
+        }
+    }
+
+    /**
+     * 递归调用，对所有子Fragement生效
+     *
+     * @param frag
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    private void handleResult(Fragment frag, int requestCode, int resultCode,
+                              Intent data) {
+        frag.onActivityResult(requestCode & 0xffff, resultCode, data);
+        List<Fragment> frags = frag.getChildFragmentManager().getFragments();
+        if (frags != null) {
+            for (Fragment f : frags) {
+                if (f != null)
+                    handleResult(f, requestCode, resultCode, data);
+            }
+        }
+    }
 }

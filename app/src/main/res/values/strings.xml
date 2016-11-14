@@ -28,4 +28,10 @@
     <string name="favourite">收藏</string>
     <string name="share">分享</string>
     <string name="recent">浏览</string>
+
+    <string name="auth_failure">授权失败</string>
+    <string name="auth_success">授权成功</string>
+    <string name="auth_cancel">取消授权</string>
+    <string name="clearcache">清除缓存</string>
+    <string name="exit">退出登录</string>
 </resources>

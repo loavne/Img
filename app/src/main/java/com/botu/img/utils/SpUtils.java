@@ -43,4 +43,11 @@ public class SpUtils {
                 Context.MODE_PRIVATE);
         return sp.getInt(key, defValue);
     }
+
+    public static void removeKey(Context ctx, String key) {
+        SharedPreferences sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(key);
+        editor.apply();
+    }
 }

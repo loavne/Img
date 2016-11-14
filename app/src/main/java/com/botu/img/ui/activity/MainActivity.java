@@ -27,6 +27,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     public Menu mMenu;
 
+    private boolean isSetting = false;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -139,5 +141,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        FragmentFactory.createFragment(3).onActivityResult(requestCode, resultCode, data);
     }
 }

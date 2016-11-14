@@ -59,8 +59,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_deisgn_padding_left_8"
-                android:background="@mipmap/ic_launcher"/>
+                android:layout_marginTop="@dimen/material_deisgn_padding_left_8"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -68,8 +67,6 @@
                 android:layout_below="@+id/iv_head"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="16dp"
-                android:text="ADB"
-                android:textColor="@color/gray"
                 android:textSize="20sp"/>
         </RelativeLayout>
 
