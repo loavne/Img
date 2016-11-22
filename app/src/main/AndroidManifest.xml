@@ -62,6 +62,8 @@
         <meta-data
             android:name="QBSDKAppKey"
             android:value="Air7mfs2ImoVGSyq1qClDK94" />
+
+        <activity android:name=".ui.activity.ImagePreviewActivity"/>
     </application>
 
 </manifest>

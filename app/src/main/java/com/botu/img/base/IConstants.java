@@ -13,4 +13,6 @@ public class IConstants {
 
     public static final String SINA_APP_KEY = "2651927103";
     public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html"; //回调页
+
+    public static final String NEWS_URL = "http://61.144.222.81/masonry_ue/interface_pic.php";
 }

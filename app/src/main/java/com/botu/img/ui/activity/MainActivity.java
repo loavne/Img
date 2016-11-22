@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.botu.img.R;
 import com.botu.img.ui.fragment.BaseFragment;
@@ -28,6 +30,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public Menu mMenu;
 
     private boolean isSetting = false;
+    private long exitTime = 0;
 
     @Override
     public int getLayoutId() {
@@ -146,5 +149,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         FragmentFactory.createFragment(3).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                MainActivity.this.finish();
+                System.exit(0);
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

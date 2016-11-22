@@ -9,4 +9,6 @@
 
     <color name="tab_txt_selected">#E7394E</color>
     <color name="list_item_press">#216b74ff</color>
+    <color name="main_bg">#c3c9ce</color>
+    <color name="txt_color">#1d1e1e</color>
 </resources>
