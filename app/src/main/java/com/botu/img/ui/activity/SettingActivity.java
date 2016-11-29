@@ -93,9 +93,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 SpUtils.setBoolean(SettingActivity.this, "isLogin", false); //设置为未登录
                 SettingActivity.this.finish();
                 break;
-           case R.id.rl_clear_cache:
+            case R.id.rl_clear_cache:
                 //清除缓存
                 DataCleanManager.cleanAllCache(getApplicationContext());
+//                DataCleanManager.cleanDatabases(getApplicationContext()); 如果这么干了，再回到首页点击图片会爆出错误，因为数据库不在了，你却添加东西到数据库中
                 Toast.makeText(this, "清理成功", Toast.LENGTH_SHORT).show();
                 cacheSize.setText("0.0B");
                 break;

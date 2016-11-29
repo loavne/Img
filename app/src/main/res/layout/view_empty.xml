@@ -5,10 +5,12 @@
               android:layout_height="match_parent"
               android:gravity="center"
     android:background="@color/main_bg">
+
     <TextView
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="网络连接失败，请点击重试"
-        android:textColor="@color/txt_color"/>
+        android:textColor="@color/txt_color"
+        android:id="@+id/textView"/>
 </LinearLayout>

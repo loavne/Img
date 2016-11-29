@@ -53,6 +53,12 @@ public class SplashActivity extends BaseActivity {
 
         rlbg = (RelativeLayout) findViewById(R.id.rl_bg);
 
+        //启动网络状态服务
+        Intent intent = new Intent();
+        intent.setAction("com.botu.img.service.NetworkState");
+        intent.setPackage(getPackageName());
+        startService(intent);
+
         //判断是否需要更新(获取服务器版本号)
 //        isUpdate();
 
@@ -159,5 +165,6 @@ public class SplashActivity extends BaseActivity {
         super.onDestroy();
         //取消网络
         OkGo.getInstance().cancelTag(this);
+
     }
 }

@@ -59,11 +59,24 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
 
+        <activity android:name=".ui.activity.FavouriteActivity"/>
+
         <meta-data
             android:name="QBSDKAppKey"
-            android:value="Air7mfs2ImoVGSyq1qClDK94" />
+            android:value="Air7mfs2ImoVGSyq1qClDK94"/>
 
-        <activity android:name=".ui.activity.ImagePreviewActivity"/>
+        <service android:name=".service.NetworkStateService">
+            <intent-filter android:priority="1000">
+                <action android:name="com.botu.img.service.NetworkState"/>
+            </intent-filter>
+        </service>
+
+        <activity android:name=".ui.activity.ImagePreviewActivity">
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -6,9 +6,15 @@
     <color name="colorSplash">#FCCB0F</color>
     <color name="gray">#20000000</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="nv_bg">#B2AFB2</color>
 
     <color name="tab_txt_selected">#E7394E</color>
     <color name="list_item_press">#216b74ff</color>
     <color name="main_bg">#c3c9ce</color>
     <color name="txt_color">#1d1e1e</color>
+
+    <color name="nav_bg">#fe2641</color>
+    <color name="split_line">#40b7b7b7</color>
 </resources>

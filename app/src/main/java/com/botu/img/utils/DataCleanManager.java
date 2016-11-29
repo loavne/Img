@@ -13,6 +13,12 @@ import java.math.BigDecimal;
  */
 public class DataCleanManager {
 
+
+    public static void cleanDatabases(Context context) {
+        File file = new File("/data/data/" + context.getPackageName() + "/databases");
+        deleteDir(file);
+    }
+
     /**
      * 清除内外缓存
      * @param context

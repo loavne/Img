@@ -5,6 +5,8 @@ package com.botu.img.base;
  * @date : 2016-11-09 17:43
  */
 public class IConstants {
+    public static final String SCOPE = "all";
+
     public static final String WX_APP_ID = "wxe2364bfb2556b3a4";
     public static final String WX_APP_SECRET = "e07b6121eb475e32b8da5ce20f84fdcd";
 

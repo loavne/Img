@@ -19,10 +19,10 @@ import android.widget.Toast;
 import com.botu.img.MyApp;
 import com.botu.img.R;
 import com.botu.img.base.IConstants;
+import com.botu.img.ui.activity.FavouriteActivity;
 import com.botu.img.utils.SpUtils;
 import com.botu.sticklibrary.view.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
@@ -40,12 +40,11 @@ import com.tencent.tauth.UiError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * 我的
- *
- * @author: swolf
- * @date : 2016-11-03 09:58
- */
+import static com.botu.img.MyApp.mAuthInfo;
+import static com.botu.img.MyApp.mTencent;
+import static com.botu.img.base.IConstants.SCOPE;
+
+
 public class PersonFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String TAG = PersonFragment.class.getSimpleName();
@@ -62,11 +61,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private TextView mTvName;
 
     private LoginBroadcastReceiver mReceiver;
-    public Tencent mTencent;
-    private String SCOPE = "all";
     private LoginIUiListener loginListener;
     private UserInfoIUiListener userInfoIUiListener;
-    private AuthInfo mAuthInfo;
     private SsoHandler mSsoHandler;
     private Oauth2AccessToken mAccessToken;
 
@@ -167,6 +163,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
 
             case R.id.ll_favourite:
+                Intent intent = new Intent(mActivity, FavouriteActivity.class);
+                mActivity.startActivity(intent);
                 break;
             case R.id.ll_share:
                 break;
@@ -177,7 +175,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private void loginSina() {
         loginPlatform = 2;
-        mAuthInfo = new AuthInfo(mActivity, IConstants.SINA_APP_KEY, IConstants.REDIRECT_URL, SCOPE);
         mSsoHandler = new SsoHandler(mActivity, mAuthInfo);
         mSsoHandler.authorize(new AuthListener());
     }
@@ -222,7 +219,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 if (resultCode == -1) {
                     Tencent.handleResultData(data, loginListener);
                     //获取用户信息
-                    UserInfo info = new UserInfo(mActivity, mTencent.getQQToken());
+                    UserInfo info = new UserInfo(mActivity, MyApp.mTencent.getQQToken());
                     info.getUserInfo(userInfoIUiListener);
                 }
             }
@@ -273,10 +270,16 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onError(UiError uiError) {
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
         }
 
         @Override
         public void onCancel() {
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
         }
     }
 
@@ -335,6 +338,9 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void onCancel() {
             Toast.makeText(mActivity, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
+            if (mDialog != null && mDialog.isShowing()) {
+                mDialog.dismiss();
+            }
         }
     }
 
