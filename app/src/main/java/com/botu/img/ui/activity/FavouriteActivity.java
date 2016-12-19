@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.botu.img.R;
 import com.botu.img.bean.Newsbean;
@@ -37,6 +38,7 @@ public class FavouriteActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        TextView title = (TextView) findViewById(R.id.tv_per_title);
         addStatusBarView(R.color.tab_txt_selected);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_favourite);
         toolbar.setTitle("");
@@ -51,7 +53,7 @@ public class FavouriteActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        title.setText(getResources().getString(R.string.collect));
         mRecyclerView = (LRecyclerView) findViewById(R.id.lRecyclerView);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

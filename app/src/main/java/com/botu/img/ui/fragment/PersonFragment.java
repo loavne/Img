@@ -20,6 +20,7 @@ import com.botu.img.MyApp;
 import com.botu.img.R;
 import com.botu.img.base.IConstants;
 import com.botu.img.ui.activity.FavouriteActivity;
+import com.botu.img.ui.activity.ShareActivity;
 import com.botu.img.utils.SpUtils;
 import com.botu.sticklibrary.view.CircleImageView;
 import com.bumptech.glide.Glide;
@@ -151,6 +152,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.iv_wx:
                 loginWx();
@@ -163,12 +165,16 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 break;
 
             case R.id.ll_favourite:
-                Intent intent = new Intent(mActivity, FavouriteActivity.class);
+                intent = new Intent(mActivity, FavouriteActivity.class);
                 mActivity.startActivity(intent);
                 break;
             case R.id.ll_share:
+                intent = new Intent(mActivity, ShareActivity.class);
+                mActivity.startActivity(intent);
                 break;
             case R.id.ll_recent:
+                intent = new Intent(mActivity, FavouriteActivity.class);
+                mActivity.startActivity(intent);
                 break;
         }
     }

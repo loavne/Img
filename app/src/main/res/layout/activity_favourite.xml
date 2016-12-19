@@ -2,23 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
               android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
         android:theme="@style/Toolbar_Light_Style">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_favourite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/tab_txt_selected"
-            android:minHeight="?attr/actionBarSize">
+            android:layout_height="match_parent"
+            android:background="@color/tab_txt_selected">
 
             <TextView
+                android:id="@+id/tv_per_title"
                 style="@style/Toolbar_Style"
-                android:text="@string/favourite"
                 />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
