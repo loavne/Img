@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.botu.img.R;
-import com.botu.img.bean.Newsbean;
+import com.botu.img.base.IConstants;
+import com.botu.img.bean.ImgType;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -24,11 +25,11 @@ import uk.co.senab.photoview.PhotoView;
  * @date : 2016-11-21 14:38
  */
 public class ImagePreviewAdapter extends PagerAdapter{
-    private List<Newsbean> imageInfo;
+    private List<ImgType> imageInfo;
     private Context mContext;
     private View currentView;
 
-    public ImagePreviewAdapter(List<Newsbean> imageInfo, Context context) {
+    public ImagePreviewAdapter(List<ImgType> imageInfo, Context context) {
         this.imageInfo = imageInfo;
         mContext = context;
     }
@@ -55,11 +56,11 @@ public class ImagePreviewAdapter extends PagerAdapter{
         final ProgressBar pb = (ProgressBar) view.findViewById(R.id.pb);
         final PhotoView imageView = (PhotoView) view.findViewById(R.id.pv);
 
-        Newsbean info = this.imageInfo.get(position);
-
+        ImgType info = this.imageInfo.get(position);
+        String url = IConstants.BASE_URL + info.getFilepath() + info.getFilename();
         //显示
         pb.setVisibility(View.VISIBLE);
-        Glide.with(mContext).load(info.getPicurl()).placeholder(R.drawable.photo_default_icon)
+        Glide.with(mContext).load(url).placeholder(R.drawable.icon_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override

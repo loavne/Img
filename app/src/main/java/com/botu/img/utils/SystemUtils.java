@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.telephony.TelephonyManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,5 +41,13 @@ public class SystemUtils {
     // 将InputStream转换成Bitmap
     public static Bitmap InputStream2Bitmap(InputStream is) {
         return BitmapFactory.decodeStream(is);
+    }
+
+    /**
+     * 获取手机识别码
+     */
+    public static String getDeviceID(Context context) {
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getDeviceId();
     }
 }

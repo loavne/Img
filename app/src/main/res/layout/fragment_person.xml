@@ -2,21 +2,23 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MatchMatch"
-    android:padding="@dimen/material_deisgn_padding_top_16">
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/ll_login_from"
         style="@style/WrapWrap"
         android:gravity="center"
+        android:padding="@dimen/material_deisgn_padding_top_16"
         android:visibility="gone">
 
         <TextView
             style="@style/WrapWrap"
             android:layout_above="@+id/ll_third_login"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/material_deisgn_padding_top_16"
+            android:layout_marginBottom="24dp"
             android:text="@string/use_thrid"
-            android:textSize="@dimen/tv14"/>
+            android:textColor="@color/tab_txt_selected"
+            android:textSize="@dimen/tv16"/>
 
         <RelativeLayout
             android:id="@+id/ll_third_login"
@@ -48,85 +50,106 @@
     <LinearLayout
         android:id="@+id/ll_userinfo_content"
         style="@style/MatchWrap"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <RelativeLayout
-            style="@style/MatchWrap"
-            android:background="@color/gray">
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/icon_user_bg">
 
             <com.botu.sticklibrary.view.CircleImageView
                 android:id="@+id/iv_head"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/material_deisgn_padding_left_8"/>
+                android:layout_marginTop="24dp"/>
 
             <TextView
                 android:id="@+id/tv_name"
                 style="@style/WrapWrap"
                 android:layout_below="@+id/iv_head"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="16dp"
-                android:textSize="20sp"/>
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_sub_name"
+                style="@style/WrapWrap"
+                android:layout_below="@+id/tv_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/white"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_marginTop="@dimen/material_deisgn_padding_top_16"
+        <LinearLayout
+            android:layout_marginTop="8dp"
             style="@style/MatchMatch">
+
             <LinearLayout
                 android:id="@+id/ll_favourite"
                 style="@style/WrapWrap"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/my_favorite"/>
+                    android:src="@drawable/icon_collection_icon_normal"/>
 
                 <TextView
                     style="@style/WrapWrap"
                     android:text="@string/favourite"
-                    android:textSize="@dimen/tv18"
-                    android:textColor="@color/gray"/>
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/tab_txt_selected"
+                    android:textSize="@dimen/tv18"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_share"
                 style="@style/WrapWrap"
                 android:layout_centerHorizontal="true"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/my_share"/>
+                    android:src="@drawable/share_icon_normal"/>
 
                 <TextView
+                    android:id="@+id/textView2"
                     style="@style/WrapWrap"
                     android:text="@string/share"
-                    android:textSize="@dimen/tv18"
-                    android:textColor="@color/gray"
-                    android:id="@+id/textView2"/>
+                    android:textColor="@color/tab_txt_selected"
+                    android:textSize="@dimen/tv18"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_recent"
                 style="@style/WrapWrap"
                 android:layout_alignParentRight="true"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/my_recent"/>
+                    android:src="@drawable/icon_foot_normal"/>
 
                 <TextView
                     style="@style/WrapWrap"
                     android:text="@string/recent"
-                    android:textSize="@dimen/tv18"
-                    android:textColor="@color/gray"/>
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/tab_txt_selected"
+                    android:textSize="@dimen/tv18"/>
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

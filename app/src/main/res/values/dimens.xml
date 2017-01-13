@@ -8,6 +8,7 @@
     <dimen name="material_deisgn_padding_left_8">8dp</dimen>
     <dimen name="material_deisgn_padding_left_16">16dp</dimen>
     <dimen name="material_deisgn_padding_top_16">16dp</dimen>
+    <dimen name="material_deisgn_padding_right_32">32dp</dimen>
     <dimen name="material_deisgn_padding_right_16">16dp</dimen>
 
     <dimen name="tv14">14sp</dimen>

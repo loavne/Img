@@ -16,6 +16,7 @@ import com.botu.img.R;
 import com.botu.img.ui.fragment.BaseFragment;
 import com.botu.img.ui.fragment.FragmentFactory;
 
+
 /**
  * @author: swolf
  * @date : 2016-11-02 14:21
@@ -39,17 +40,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     protected void initView() {
-        //状态栏颜色
-        addStatusBarView(R.color.tab_txt_selected);
+        setToolBar(getString(R.string.tab_home), R.color.gradient, false);
+
 
         radioGroup = (RadioGroup) findViewById(R.id.rg_tab_bottom);
         flContent = (FrameLayout) findViewById(R.id.fl_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTitle = (TextView) findViewById(R.id.tv_title);
-
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        mTitle.setText(getResources().getString(R.string.tab_home));
+        mTitle = (TextView) findViewById(R.id.tv_per_title);
 
         radioGroup.setOnCheckedChangeListener(this);
         mToolbar.setOnMenuItemClickListener(this);
@@ -61,26 +58,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int position) {
         int index = 0;
-
         switch (position) {
             case R.id.rb_tab_home:
                 index = 0;
                 mTitle.setText(getResources().getString(R.string.tab_home));
                 mMenu.setGroupVisible(0, false);
                 break;
-            case R.id.rb_tab_dynamic:
-                index=1;
-                mTitle.setText(getResources().getString(R.string.tab_dynamic));
-                mMenu.setGroupVisible(0, false);
-                break;
             case R.id.rb_tab_search:
-                index =2;
+                index = 1;
                 mTitle.setText(getResources().getString(R.string.tab_search));
                 mMenu.setGroupVisible(0, false);
                 break;
             case R.id.rb_tab_person:
-                index =3;
-                mTitle.setText(getResources().getString(R.string.tab_person));
+                index = 2;
+                mTitle.setText(getResources().getString(R.string.tab_user));
                 mMenu.setGroupVisible(0, true);
                 break;
         }
@@ -110,16 +101,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 case 2:
                     fragment = FragmentFactory.createFragment(2);
                     break;
-                case 3:
-                    fragment = FragmentFactory.createFragment(3);
-                    break;
             }
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
     };
 
@@ -132,7 +120,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mMenu.setGroupVisible(0, false);
         return true;
     }
-
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -148,12 +135,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        FragmentFactory.createFragment(3).onActivityResult(requestCode, resultCode, data);
+        FragmentFactory.createFragment(2).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (KeyEvent.KEYCODE_BACK == keyCode) {
+
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();

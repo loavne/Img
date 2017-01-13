@@ -44,4 +44,12 @@ public class UIUtils {
         return (int) (pxValue / scale + 0.5f);
     }
 
+
+    public static int getScreenOneThird(Context context) {
+        //获取屏幕的宽度
+        int screenWidth = UIUtils.getScreenWidth(context);
+        //1/3屏幕宽度
+        return (int) ((screenWidth - UIUtils.dip2px(8)) / 3);
+    }
+
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
  * @date : 2016-11-03 09:23
  */
 public abstract class BaseFragment extends Fragment {
+    public static final String TAG = "hlh";
     public Activity mActivity; //MainActivity
 
     @Override

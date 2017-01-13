@@ -3,59 +3,44 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:fitsSystemWindows="true"
+              android:background="@color/white"
               android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Toolbar_Light_Style">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_setting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/tab_txt_selected"
-            android:minHeight="?attr/actionBarSize">
-
-            <TextView
-                style="@style/Toolbar_Style"
-                android:text="@string/setting"
-                />
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/item_toolbar"/>
 
     <!--<FrameLayout-->
     <!--android:id="@+id/fl_setting_content"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"/>-->
 
+
     <RelativeLayout
         android:id="@+id/rl_clear_cache"
         android:layout_marginTop="@dimen/material_deisgn_padding_left_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray">
+        android:background="@color/person_fav_bg">
 
         <TextView
             style="@style/WrapWrap"
-            android:padding="@dimen/material_deisgn_padding_right_16"
+            android:padding="16dp"
             android:text="@string/clearcache"/>
 
         <TextView
             android:id="@+id/tv_cache_size"
             style="@style/WrapWrap"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/material_deisgn_padding_right_16"
-            android:text="2.30M"/>
+            android:padding="16dp"
+            android:text="0.00M"/>
     </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="@dimen/material_deisgn_padding_left_8"
+        android:layout_marginTop="@dimen/material_deisgn_padding_left_16"
         android:id="@+id/tv_exit"
         style="@style/MatchWrap"
         android:gravity="center"
         android:padding="@dimen/material_deisgn_padding_right_16"
         android:text="@string/exit"
-        android:background="@color/gray"
-        android:textColor="@color/colorAccent"/>
+        android:background="@color/person_fav_bg"
+        android:textColor="@color/colorPrimary"/>
 </LinearLayout>

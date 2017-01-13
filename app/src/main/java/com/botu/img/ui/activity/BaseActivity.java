@@ -7,20 +7,29 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.botu.img.R;
 
 import java.util.List;
 
 /**
  * Activity基类
+ *
  * @author: swolf
  * @date : 2016-11-01 17:42
  */
-public abstract class BaseActivity extends AppCompatActivity{
+public abstract class BaseActivity extends AppCompatActivity {
+    public static final String TAG = "hlh";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity{
             decorView.setSystemUiVisibility(option);
             //设置状态栏为透明
             getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){ //4.4-5.0
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { //4.4-5.0
             WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
             layoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | layoutParams.flags);
         }
@@ -55,6 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     /**
      * 设置状态栏View,覆盖原有的
+     *
      * @param color 设置颜色
      */
     public void addStatusBarView(int color) {
@@ -69,6 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity{
 
     /**
      * 获取状态栏高度
+     *
      * @return 状态栏高度
      */
     public int getStatusBarHeight() {
@@ -102,7 +113,7 @@ public abstract class BaseActivity extends AppCompatActivity{
             } else {
                 handleResult(frag, requestCode, resultCode, data);
             }
-            return ;
+            return;
         }
     }
 
@@ -122,6 +133,54 @@ public abstract class BaseActivity extends AppCompatActivity{
             for (Fragment f : frags) {
                 if (f != null)
                     handleResult(f, requestCode, resultCode, data);
+            }
+        }
+    }
+
+    /**
+     * 设置标题栏
+     *
+     * @param title
+     */
+    public void setTitle(String title) {
+        TextView textView = (TextView) findViewById(R.id.tv_title);
+        textView.setText(title);
+    }
+
+    public void setBack() {
+        ImageView imageView = (ImageView) findViewById(R.id.iv_back);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+    public void setToolBar(String title, int color, boolean showBack) {
+        //状态栏
+        addStatusBarView(color);
+        TextView tv_title = (TextView) findViewById(R.id.tv_per_title);
+        tv_title.setText(title);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                onBackPressed();
+            }
+        });
+        ActionBar actionBar = getSupportActionBar();
+        if (showBack) {
+            if (actionBar != null) {
+                actionBar.setDisplayShowHomeEnabled(true);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        } else {
+            if (actionBar != null) {
+                actionBar.setDisplayShowHomeEnabled(false);
             }
         }
     }

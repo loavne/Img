@@ -1,7 +1,6 @@
 package com.botu.img.callback;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.callback.AbsCallback;
@@ -18,12 +17,12 @@ import okhttp3.Response;
  * @author: swolf
  * @date : 2016-11-09 18:11
  */
-public class JsonCallback<T> extends AbsCallback<T>{
+public abstract class JsonCallback<T> extends AbsCallback<T>{
     private Class<T> clazz;
     private Type type;
 
     /**
-     * 传class,直接返回解析生成的对象
+     * 传class,直接返回解析生成的对象，使用T.class时，必须只能是单个对象，传入List.class，则出现解析不了错误
      */
     public JsonCallback(Class<T> clazz) {
         this.clazz = clazz;
@@ -57,7 +56,6 @@ public class JsonCallback<T> extends AbsCallback<T>{
     @Override
     public T convertSuccess(Response response) throws Exception {
         String result = response.body().string();
-        Log.e("WxEntryActivity", "convertSuccess: " + result);
         if(TextUtils.isEmpty(result)) return null;
 
         /**
@@ -70,11 +68,17 @@ public class JsonCallback<T> extends AbsCallback<T>{
         String data = jsonObject.optString("data", "");
         switch (code) {
             case 0:
+                //空数据
+                throw new IllegalStateException("nodata");
+            case 1:
+                //成功
                 if(clazz == String.class) return (T)data;
-                if(clazz != null) return new Gson().fromJson(data, clazz);
+                if(clazz != null) return new Gson().fromJson(data, clazz); //
                 if(type!= null) return new Gson().fromJson(data, type);
                 break;
-
+            case 2:
+                // 参数错误
+                throw new IllegalStateException("参数错误");
         }
 
         return null;

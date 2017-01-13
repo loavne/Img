@@ -30,7 +30,7 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
     //小点数组
     private ImageView[] mDots;
     //背景图片资源Id
-    private int[] imageIds = new int[]{R.drawable.guide_one, R.drawable.guide_two, R.drawable.guide_three};
+    private int[] imageIds = new int[]{R.drawable.guide_1, R.drawable.guide_2, R.drawable.guide_3};
     //当前显示的位置
     private int currentIndex;
 

@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.RelativeLayout;
 
 import com.botu.img.R;
+import com.botu.img.base.IConstants;
 import com.botu.img.bean.UpdateInfo;
 import com.botu.img.callback.InputStreamCallback;
 import com.botu.img.utils.SpUtils;
@@ -39,6 +40,23 @@ public class SplashActivity extends BaseActivity {
     private UpdateInfo mInfo;
     private String updateUrl;
     private String apkUrl;
+    private boolean mIsFirstEnter;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Intent eintent = null;
+            if (msg.what == 1) {
+                eintent = new Intent(getApplicationContext(), GuideActivity.class);  //进入引导页
+            } else {
+                eintent = new Intent(getApplicationContext(), MainActivity.class);   //进入主页
+            }
+            startActivity(eintent);
+            finish();
+
+        }
+    };
 
 
     @Override
@@ -50,44 +68,68 @@ public class SplashActivity extends BaseActivity {
     protected void initView() {
         //设置状态栏颜色
         addStatusBarView(R.color.colorSplash);
-
         rlbg = (RelativeLayout) findViewById(R.id.rl_bg);
+
+        //广告业务
+//        SplashAdListener adListener = new SplashAdListener() {
+//            @Override
+//            public void onAdPresent() {
+//                Log.i("hlh", "onAdPresent: -----");
+//            }
+//
+//            @Override
+//            public void onAdDismissed() {
+//                Log.i("hlh", "onAdDismissed: -----");
+//            }
+//
+//            @Override
+//            public void onAdFailed(String s) {
+//                Log.i("hlh", "onAdFailed: -----" + s);
+//                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+//            }
+//
+//            @Override
+//            public void onAdClick() {
+//                Log.i("hlh", "onAdClick: -----");
+//            }
+//        };
+//        String adId = "3192789";
+//        new SplashAd(this, rlbg, adListener, adId, true);
 
         //启动网络状态服务
         Intent intent = new Intent();
-        intent.setAction("com.botu.img.service.NetworkState");
+        intent.setAction(IConstants.networkStateReceiver);
         intent.setPackage(getPackageName());
         startService(intent);
 
         //判断是否需要更新(获取服务器版本号)
 //        isUpdate();
-
-        ScaleAnimation alphaAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        alphaAnimation.setDuration(1000);
-        rlbg.startAnimation(alphaAnimation);
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void run() {
+                try {
+                    Thread.sleep(1500);
+                    mIsFirstEnter = SpUtils.getBoolean(SplashActivity.this, "isFirstEnter", true);
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                boolean isFirstEnter = SpUtils.getBoolean(SplashActivity.this, "isFirstEnter", true);
-                Intent intent;
-                if (isFirstEnter) {
-                    intent = new Intent(getApplicationContext(), GuideActivity.class);  //进入引导页
-                } else {
-                    intent = new Intent(getApplicationContext(), MainActivity.class);   //进入主页
+                    Message msg = Message.obtain();
+                    if (mIsFirstEnter) {
+                        msg.what = 1;
+
+                    } else {
+                        msg.what = 0;
+                    }
+                    mHandler.sendMessage(msg);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                startActivity(intent);
-                finish();
             }
+        }).start();
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
+    }
+
+    private void sendDeviceId() {
 
     }
 
@@ -149,6 +191,7 @@ public class SplashActivity extends BaseActivity {
 
     /**
      * 安装APK
+     *
      * @param file apk文件
      */
     public void installApk(File file) {

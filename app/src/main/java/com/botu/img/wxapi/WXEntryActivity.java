@@ -34,7 +34,6 @@ import okhttp3.Response;
  */
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
-    private static final String TAG = "hlh";
     //微信返回的消息类型，
     private static final int RETURN_MSG_TYPE_LOGIN = 1;
     private static final int RETURN_MSG_TYPE_SHARE = 2;
@@ -66,23 +65,17 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 WXEntryActivity.this.finish();
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
-                result = "发送取消";
-                finish();
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                result = "发送被拒绝";
-                finish();
                 break;
             default:
-                result = "发送返回";
-                finish();
                 break;
         }
     }
 
-
     /**
      * 获取微信access_token
+     *
      * @param code
      */
     private void getAccessToken(String code) {
@@ -110,27 +103,33 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         return new Gson().fromJson(result, WxAccessToken.class);
 
                     }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                    }
                 });
     }
 
     /**
      * 获取用户信息
      */
-    private void getUserInfo(String token, String openid) {
+    private void getUserInfo(String token, final String openid) {
         //接口
         user_info_url = "https://api.weixin.qq.com/sns/userinfo?access_token="
                 + token
                 + "&openid="
                 + openid;
         OkGo.get(user_info_url)
-                .execute(new JsonCallback<WxUserInfo>(WxUserInfo.class){
+                .execute(new JsonCallback<WxUserInfo>(WxUserInfo.class) {
                     @Override
                     public void onSuccess(WxUserInfo wxUserInfo, Call call, Response response) {
                         Log.e("hlh", "onSuccess: " + wxUserInfo.toString());
                         //发送广播告知PersonFrament，成功获取信息
-                        Intent intent = new Intent("com.botu.img");
-                        intent.putExtra("img", wxUserInfo.getHeadimgurl());
-                        intent.putExtra("name", wxUserInfo.getNickname());
+                        Intent intent = new Intent(IConstants.loginReceiver);
+                        intent.putExtra(IConstants.header, wxUserInfo.getHeadimgurl());
+                        intent.putExtra(IConstants.username, wxUserInfo.getNickname());
+                        intent.putExtra(IConstants.openId, openid);
                         sendBroadcast(intent);
                         WXEntryActivity.this.finish();
                     }
@@ -138,7 +137,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     @Override
                     public WxUserInfo convertSuccess(Response response) throws Exception {
                         String result = response.body().string();
-                        if(TextUtils.isEmpty(result)) return null;
+                        if (TextUtils.isEmpty(result)) return null;
                         return new Gson().fromJson(result, WxUserInfo.class);
                     }
                 });

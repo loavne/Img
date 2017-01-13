@@ -3,8 +3,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
-    <com.github.jdsjlzx.recyclerview.LRecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+<com.github.jdsjlzx.recyclerview.LRecyclerView
+    android:id="@+id/lRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+
 </LinearLayout>

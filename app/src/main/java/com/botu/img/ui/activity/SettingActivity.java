@@ -1,13 +1,12 @@
 package com.botu.img.ui.activity;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.botu.img.R;
+import com.botu.img.base.IConstants;
 import com.botu.img.utils.DataCleanManager;
 import com.botu.img.utils.SpUtils;
 
@@ -29,22 +28,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView() {
-        //添加
-        addStatusBarView(R.color.tab_txt_selected);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_setting);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        setToolBar(getString(R.string.setting), R.color.gradient, true);
 
         //添加一个PreferenceFragment
 //        mSettingFragment = new SettingFragment();
@@ -54,7 +38,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         cacheSize = (TextView) findViewById(R.id.tv_cache_size);
         exit = (TextView) findViewById(R.id.tv_exit);
 
-        if (SpUtils.getString(this, "name", "").equals("")) {
+        if (SpUtils.getString(this, IConstants.username, "").equals("")) {
             exit.setVisibility(View.GONE);
         } else {
             exit.setVisibility(View.VISIBLE);
@@ -73,24 +57,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.tv_exit:
-//
-//                break;
-//        }
-//        return true;
-//    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_exit:
                 //退出登录
-                SpUtils.removeKey(SettingActivity.this, "img");
-                SpUtils.removeKey(SettingActivity.this, "name");
-                SpUtils.setBoolean(SettingActivity.this, "isLogin", false); //设置为未登录
+                SpUtils.removeKey(SettingActivity.this, IConstants.header);
+                SpUtils.removeKey(SettingActivity.this, IConstants.username);
+                SpUtils.setBoolean(SettingActivity.this, IConstants.isLogin, false); //设置为未登录
                 SettingActivity.this.finish();
                 break;
             case R.id.rl_clear_cache:

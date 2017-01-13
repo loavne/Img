@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorSplash">#FCCB0F</color>
-    <color name="gray">#20000000</color>
+    <color name="colorPrimary">#7ea5ff</color>
+    <color name="gradient">#7ea5ff</color>
+
+    <color name="tab_bg">#f5f9ff</color>
+    <color name="tab_line">#ebf3ff</color>
+
+    <color name="toolbar_bg">#80000000</color>
+    <color name="all_tran">#00000000</color>
+
+    <color name="txt_content_selected">#7db4ff</color>
+    <color name="txt_content_normal">#ffffff</color>
+
+    <color name="tab_txt_selected">#7db4ff</color>
+    <color name="tab_txt_normal">#8a8a8a</color>
+
+    <color name="person_bg">#f5f9ff</color>
+    <color name="person_fav_bg">#eaf3ff</color>
+
     <color name="white">#ffffff</color>
+
+
+    <color name="colorSplash">#DAE8FF</color>
+
+
+    <color name="gray">#20000000</color>
+    <color name="tab_text_color">#eaeaea</color>
     <color name="black">#000000</color>
 
     <color name="nv_bg">#B2AFB2</color>
-
-    <color name="tab_txt_selected">#E7394E</color>
     <color name="list_item_press">#216b74ff</color>
     <color name="main_bg">#c3c9ce</color>
     <color name="txt_color">#1d1e1e</color>
 
-    <color name="nav_bg">#fe2641</color>
     <color name="split_line">#40b7b7b7</color>
 </resources>

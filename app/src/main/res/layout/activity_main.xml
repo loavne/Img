@@ -6,17 +6,7 @@
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/tab_txt_selected">
-        <TextView
-            android:id="@+id/tv_title"
-            style="@style/Toolbar_Style"
-            android:text="@string/tab_home"/>
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/item_toolbar"/>
 
     <FrameLayout
         android:id="@+id/fl_content"
@@ -24,10 +14,15 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab_line"/>
     <RadioGroup
         android:id="@+id/rg_tab_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/tab_bg"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -37,12 +32,6 @@
             android:checked="true"
             android:drawableTop="@drawable/tab_home_selector"
             android:text="@string/tab_home"/>
-
-        <RadioButton
-            android:id="@+id/rb_tab_dynamic"
-            style="@style/Bottom_Tab_Style"
-            android:drawableTop="@drawable/tab_dynamic_selector"
-            android:text="@string/tab_dynamic"/>
 
         <RadioButton
             android:id="@+id/rb_tab_search"

@@ -22,12 +22,9 @@ public class FragmentFactory {
                     fragment = new HomeFragment();
                     break;
                 case 1:
-                    fragment = new DynamicFragment();
-                    break;
-                case 2:
                     fragment = new SearchFragment();
                     break;
-                case 3:
+                case 2:
                     fragment = new PersonFragment();
                     break;
                 default:

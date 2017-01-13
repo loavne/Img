@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -19,11 +18,17 @@ import android.widget.Toast;
 import com.botu.img.MyApp;
 import com.botu.img.R;
 import com.botu.img.base.IConstants;
+import com.botu.img.cache.ACache;
 import com.botu.img.ui.activity.FavouriteActivity;
+import com.botu.img.ui.activity.FootActivity;
 import com.botu.img.ui.activity.ShareActivity;
+import com.botu.img.utils.L;
 import com.botu.img.utils.SpUtils;
+import com.botu.img.utils.SystemUtils;
 import com.botu.sticklibrary.view.CircleImageView;
 import com.bumptech.glide.Glide;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
@@ -40,6 +45,9 @@ import com.tencent.tauth.UiError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 import static com.botu.img.MyApp.mAuthInfo;
 import static com.botu.img.MyApp.mTencent;
@@ -69,6 +77,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     private int loginPlatform = 0;
     private ProgressDialog mDialog;
+    private String mOpenID;
+    private ACache mCache;
 
     @Override
     protected int getLayoutId() {
@@ -77,59 +87,49 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     protected void initView() {
+        mCache = ACache.get(mActivity);
         llLogin = (RelativeLayout) mActivity.findViewById(R.id.ll_login_from);
+        mLlContent = (LinearLayout) mActivity.findViewById(R.id.ll_userinfo_content);
+
         mWx = (ImageView) mActivity.findViewById(R.id.iv_wx);
         mQq = (ImageView) mActivity.findViewById(R.id.iv_qq);
         mSina = (ImageView) mActivity.findViewById(R.id.iv_sina);
 
-        mWx.setOnClickListener(this);
-        mQq.setOnClickListener(this);
-        mSina.setOnClickListener(this);
-
-        mLlContent = (LinearLayout) mActivity.findViewById(R.id.ll_userinfo_content);
         mFavourite = (LinearLayout) mActivity.findViewById(R.id.ll_favourite);
         mShare = (LinearLayout) mActivity.findViewById(R.id.ll_share);
         mRecent = (LinearLayout) mActivity.findViewById(R.id.ll_recent);
         mIvHead = (CircleImageView) mActivity.findViewById(R.id.iv_head);
         mTvName = (TextView) mActivity.findViewById(R.id.tv_name);
 
+        mWx.setOnClickListener(this);
+        mQq.setOnClickListener(this);
+        mSina.setOnClickListener(this);
+
         mFavourite.setOnClickListener(this);
         mShare.setOnClickListener(this);
         mRecent.setOnClickListener(this);
-
-        //先判断是否登录过
-        if (SpUtils.getBoolean(mActivity, "isLogin", false)) {
-            //登录则显示个人衷心界面
-            llLogin.setVisibility(View.VISIBLE);
-            mLlContent.setVisibility(View.GONE);
-            Glide.with(mActivity).load(SpUtils.getString(mActivity, "img", "")).into(mIvHead); //加载图片
-            mTvName.setText(SpUtils.getString(mActivity, "name", ""));
-
-        } else {
-            //未登录则显示登录界面
-            llLogin.setVisibility(View.GONE);
-            mLlContent.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
     public void initData() {
-        //注册
+        //注册登录广播
         mReceiver = new LoginBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("com.botu.img");
+        filter.addAction(IConstants.loginReceiver);
         mActivity.registerReceiver(mReceiver, filter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (SpUtils.getBoolean(mActivity, "isLogin", false)) {
+        if (SpUtils.getBoolean(mActivity, IConstants.isLogin, false)) {
+            //登录则显示个人中心界面
             llLogin.setVisibility(View.GONE);
             mLlContent.setVisibility(View.VISIBLE);
-            Glide.with(mActivity).load(SpUtils.getString(mActivity, "img", "")).into(mIvHead); //加载图片
-            mTvName.setText(SpUtils.getString(mActivity, "name", ""));
+            Glide.with(mActivity).load(SpUtils.getString(mActivity, IConstants.header, "")).asBitmap().override(50,50).fitCenter().into(mIvHead); //头像
+            mTvName.setText(SpUtils.getString(mActivity, IConstants.username, ""));
         } else {
+            //未登录则显示登录界面
             llLogin.setVisibility(View.VISIBLE);
             mLlContent.setVisibility(View.GONE);
         }
@@ -163,7 +163,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             case R.id.iv_qq:
                 loginQQ();
                 break;
-
             case R.id.ll_favourite:
                 intent = new Intent(mActivity, FavouriteActivity.class);
                 mActivity.startActivity(intent);
@@ -173,19 +172,21 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 mActivity.startActivity(intent);
                 break;
             case R.id.ll_recent:
-                intent = new Intent(mActivity, FavouriteActivity.class);
+                intent = new Intent(mActivity, FootActivity.class);
                 mActivity.startActivity(intent);
                 break;
         }
     }
 
     private void loginSina() {
+        showDialog();
         loginPlatform = 2;
         mSsoHandler = new SsoHandler(mActivity, mAuthInfo);
         mSsoHandler.authorize(new AuthListener());
     }
 
     private void loginWx() {
+        showDialog();
         if (!MyApp.wxApi.isWXAppInstalled()) {
             Toast.makeText(mActivity, "微信未安装", Toast.LENGTH_LONG);
         }
@@ -193,9 +194,11 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         req.scope = "snsapi_userinfo";
         req.state = "com.botu.img";
         MyApp.wxApi.sendReq(req);
+//        dismissDialog();
     }
 
     private void loginQQ() {
+        showDialog();
         loginPlatform = 1;
         loginListener = new LoginIUiListener();
         userInfoIUiListener = new UserInfoIUiListener();
@@ -213,11 +216,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        initProgressDialog();
-        if (mDialog != null && !mDialog.isShowing()) {
-            mDialog.show();
-        }
-
         if (loginPlatform == 1) {
             //必须要有这句，不然不回调
             Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
@@ -239,23 +237,58 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
     }
 
-    private void initProgressDialog() {
+    private void showDialog() {
         mDialog = new ProgressDialog(mActivity);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setMessage("正在登录中...");
+        mDialog.show();
     }
 
-    //设置sp
-    private void setSp(String img, String name) {
+    private void dismissDialog() {
         if (mDialog != null && mDialog.isShowing()) {
             mDialog.dismiss();
         }
-        SpUtils.setBoolean(mActivity, "isLogin", true);
-        SpUtils.setString(mActivity, "img", img);
-        SpUtils.setString(mActivity, "name", name);
-        onStart();
+    }
+
+    //发送登录信息到后台，注册，接收该用户的个人资料
+    private void setCache(String img, String name, String type) {
+        dismissDialog();
+        String deviceId = SystemUtils.getDeviceID(mActivity);
+        OkGo.post(IConstants.LOGIN_URL)
+                .params("deviceid", deviceId)
+                .params("openid", mOpenID)
+                .params("opentype", type)
+                .params("username", name)
+                .params("headpic", img)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        L.i(s);
+                        try {
+                            JSONObject js = new JSONObject(s);
+                            if (1 == js.getInt("code")) { //登录成功
+                                JSONObject data = (JSONObject) js.get("data");
+                                //接收到个人信息存储到数据库
+                                SpUtils.setBoolean(mActivity, IConstants.isLogin, true);
+                                SpUtils.setString(mActivity, IConstants.header, data.getString("headpic"));
+                                SpUtils.setString(mActivity, IConstants.username, data.getString("username"));
+                                SpUtils.setInt(mActivity, IConstants.userId, data.getInt("id"));
+                                //刷新界面
+                                onStart();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        L.i(e.toString());
+                    }
+                });
     }
 
     //QQ 登录回调接口
@@ -264,10 +297,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         public void onComplete(Object o) {
             try {
                 JSONObject jo = (JSONObject) o;
-                String openID = jo.getString("openid");
+                mOpenID = jo.getString("openid");
                 String accessToken = jo.getString("access_token");
                 String expires = jo.getString("expires_in");
-                mTencent.setOpenId(openID);
+                mTencent.setOpenId(mOpenID);
                 mTencent.setAccessToken(accessToken, expires);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -276,16 +309,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onError(UiError uiError) {
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
+            dismissDialog();
         }
 
         @Override
         public void onCancel() {
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
+            dismissDialog();
         }
     }
 
@@ -297,7 +326,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 JSONObject jo = (JSONObject) o;
                 String nickName = jo.getString("nickname");
                 String img = jo.getString("figureurl_qq_1");
-                setSp(img, nickName);
+                //回调
+                setCache(img, nickName, "qq");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -305,11 +335,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         public void onError(UiError uiError) {
+            dismissDialog();
         }
 
         @Override
         public void onCancel() {
-
+            dismissDialog();
         }
     }
 
@@ -319,34 +350,30 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         public void onComplete(Bundle bundle) {
             mAccessToken = Oauth2AccessToken.parseAccessToken(bundle);// 从 Bundle 中解析 Token
             if (mAccessToken.isSessionValid()) {
-//                String UID = mAccessToken.getUid();
-//                String accessToken = mAccessToken.getToken();
                 //获取用户信息
                 UsersAPI usersAPI = new UsersAPI(mActivity, IConstants.SINA_APP_KEY, mAccessToken);
                 long uid = Long.parseLong(mAccessToken.getUid());
                 usersAPI.show(uid, mRequestListener);
-                Toast.makeText(mActivity, R.string.auth_success, Toast.LENGTH_SHORT).show();
+                mOpenID = mAccessToken.getUid();
             } else {
                 String code = bundle.getString("code");
                 String message = mActivity.getString(R.string.auth_failure);
                 if (!TextUtils.isEmpty(code)) {
                     message = message + "\ncode: " + code;
                 }
-                Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
+                L.i("微博授权 " + message);
             }
         }
 
         @Override
         public void onWeiboException(WeiboException e) {
-            Log.e("hlh", "WeiboException: " + e.getMessage());
+            L.e("WeiboException: " + e.getMessage());
+            dismissDialog();
         }
 
         @Override
         public void onCancel() {
-            Toast.makeText(mActivity, R.string.auth_cancel, Toast.LENGTH_SHORT).show();
-            if (mDialog != null && mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
+            dismissDialog();
         }
     }
 
@@ -356,13 +383,13 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         public void onComplete(String response) {
             if (!TextUtils.isEmpty(response)) {
                 User user = User.parse(response);
-                setSp(user.profile_image_url, user.screen_name);
+                setCache(user.profile_image_url, user.screen_name, "weibo");
             }
         }
 
         @Override
         public void onWeiboException(WeiboException e) {
-
+            dismissDialog();
         }
     };
 
@@ -370,10 +397,10 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     class LoginBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            initProgressDialog();
-            String img = intent.getStringExtra("img");
-            String name = intent.getStringExtra("name");
-            setSp(img, name);
+            String img = intent.getStringExtra(IConstants.header);
+            String name = intent.getStringExtra(IConstants.username);
+            mOpenID = intent.getStringExtra(IConstants.openId);
+            setCache(img, name, "wechat");
         }
     }
 
