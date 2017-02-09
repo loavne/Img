@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,6 +25,7 @@ import com.botu.img.base.IConstants;
 import com.botu.img.bean.ImgType;
 import com.botu.img.ui.adapter.ImagePreviewAdapter;
 import com.botu.img.ui.view.HackyViewPager;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.L;
 import com.botu.img.utils.SpUtils;
 import com.botu.img.utils.WxUtils;
@@ -97,6 +97,7 @@ public class ImagePreviewActivity extends BaseActivity implements View.OnClickLi
     private File mFile;
     private String mImage_url;
     public static final int IMAGE_SIZE = 32768;//微信分享图片大小限制
+    private ImageView mBack;
 
     @Override
     public int getLayoutId() {
@@ -105,26 +106,28 @@ public class ImagePreviewActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void initView() {
+        StatusBarUtil.setTranslucent(this, 0);
         mViewPager = (HackyViewPager) findViewById(R.id.viewPager);
-        mTitle = (TextView) findViewById(R.id.tv_per_title);
+        mTitle = (TextView) findViewById(R.id.tv_image_title);
         rootView = (RelativeLayout) findViewById(R.id.rootView);
         mDownload = (TextView) findViewById(R.id.tv_download);
         mFavorite = (LinearLayout) findViewById(R.id.tv_collect);
         mFavoriteImg = (ImageView) findViewById(R.id.iv_favorite);
         mShare = (TextView) findViewById(R.id.tv_share);
+        mBack = (ImageView) findViewById(R.id.iv_image_back);
 
         mDownload.setOnClickListener(this);
         mFavorite.setOnClickListener(this);
         mShare.setOnClickListener(this);
+        mBack.setOnClickListener(this);
 
         //数据源
         Intent intent = getIntent();
         mImageInfo = (List<ImgType>) intent.getSerializableExtra(IMAGE_INFO);
         currentItem = intent.getIntExtra(CURRENT_ITEM, 0);
 
-        setToolBar(mImageInfo.get(currentItem).getTitle(), R.color.toolbar_bg, true);
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setBackgroundResource(R.color.all_tran);
+        mTitle.setText(mImageInfo.get(currentItem).getTitle());
+
         final boolean hasFav = intent.getBooleanExtra("isFav", true);
         if (hasFav) {
             mFavoriteImg.setImageResource(R.drawable.icon_favorite_focused);
@@ -199,6 +202,9 @@ public class ImagePreviewActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View view) {
         mImage_url = IConstants.BASE_URL + mImageInfo.get(currentItem).getFilepath() + mImageInfo.get(currentItem).getFilename();
         switch (view.getId()) {
+            case R.id.iv_image_back:
+                this.finish();
+                break;
             case R.id.tv_download:
                 imgDownload();
                 break;
@@ -286,14 +292,14 @@ public class ImagePreviewActivity extends BaseActivity implements View.OnClickLi
                 //QQ  分享类型 （图片类型）
                 bundle.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
                 bundle.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, mFile.getAbsolutePath());
-                MyApp.mTencent.shareToQQ(ImagePreviewActivity.this, bundle, mQIUiListener);
+                MyApp.sTencent.shareToQQ(ImagePreviewActivity.this, bundle, mQIUiListener);
             } else if (msg.what == 1) {
                 //发表至QQ空间
                 bundle.putInt(QzonePublish.PUBLISH_TO_QZONE_KEY_TYPE, QzonePublish.PUBLISH_TO_QZONE_TYPE_PUBLISHMOOD); //发表类型 （纯图片）
                 ArrayList<String> imgList = new ArrayList<String>();
                 imgList.add(mFile.getAbsolutePath());
                 bundle.putStringArrayList(QzonePublish.PUBLISH_TO_QZONE_IMAGE_URL, imgList);
-                MyApp.mTencent.publishToQzone(ImagePreviewActivity.this, bundle, mQIUiListener);
+                MyApp.sTencent.publishToQzone(ImagePreviewActivity.this, bundle, mQIUiListener);
             }
         }
     };

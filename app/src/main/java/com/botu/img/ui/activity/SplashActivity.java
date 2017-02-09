@@ -12,6 +12,7 @@ import com.botu.img.R;
 import com.botu.img.base.IConstants;
 import com.botu.img.bean.UpdateInfo;
 import com.botu.img.callback.InputStreamCallback;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.SpUtils;
 import com.botu.img.utils.XmlParserUtils;
 import com.lzy.okgo.OkGo;
@@ -58,7 +59,6 @@ public class SplashActivity extends BaseActivity {
         }
     };
 
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_splash;
@@ -66,10 +66,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        //设置状态栏颜色
-        addStatusBarView(R.color.colorSplash);
+        StatusBarUtil.setTranslucent(this, 0);
         rlbg = (RelativeLayout) findViewById(R.id.rl_bg);
-
         //广告业务
 //        SplashAdListener adListener = new SplashAdListener() {
 //            @Override

@@ -26,7 +26,7 @@ public class MyApp extends Application{
     public static boolean isNetworkConn;
 
     public static IWXAPI wxApi;
-    public static Tencent mTencent;
+    public static Tencent sTencent;
     public static AuthInfo mAuthInfo;
 
     //奔溃日志路径
@@ -53,7 +53,8 @@ public class MyApp extends Application{
         wxApi.registerApp(IConstants.WX_APP_ID);
 
         //注册QQ
-        mTencent = Tencent.createInstance(IConstants.QQ_APP_ID, getApplicationContext());
+        sTencent = Tencent.createInstance(IConstants.QQ_APP_ID, getApplicationContext());
+
 
         //注册sinaWeibo
         mAuthInfo = new AuthInfo(getApplicationContext(), IConstants.SINA_APP_KEY, IConstants.REDIRECT_URL, IConstants.SCOPE);

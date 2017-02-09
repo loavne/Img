@@ -12,6 +12,8 @@ import com.botu.img.base.IConstants;
 import com.botu.img.bean.ImgType;
 import com.botu.img.callback.JsonCallback;
 import com.botu.img.ui.adapter.ImageAdapter;
+import com.botu.img.ui.view.MetaballView;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.SpUtils;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -43,6 +45,8 @@ public class ShareActivity extends BaseActivity implements OnRefreshListener, On
 
     private int page = 1;
     private RelativeLayout mView_empty;
+    private MetaballView mMetaballView;
+    private RelativeLayout mLoadingView;
 
     @Override
     public int getLayoutId() {
@@ -51,9 +55,15 @@ public class ShareActivity extends BaseActivity implements OnRefreshListener, On
 
     @Override
     protected void initView() {
-        setToolBar(getString(R.string.share), R.color.gradient, true);
-        mView_empty = (RelativeLayout) findViewById(R.id.ll_empty);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 0);
+        setToolBar(getString(R.string.share), true);
+        mView_empty = (RelativeLayout) findViewById(R.id.rl_empty);
         mRecyclerView = (LRecyclerView) findViewById(R.id.lRecyclerView_list);
+        mLoadingView = (RelativeLayout) findViewById(R.id.rl_loadingView);
+        mMetaballView = (MetaballView)findViewById(R.id.loading);
+        mMetaballView.setPaintMode(1);
+        mLoadingView.setVisibility(View.VISIBLE);
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         shareAdapter = new ImageAdapter(this, R.layout.list_item_news, mDatas);
@@ -61,6 +71,7 @@ public class ShareActivity extends BaseActivity implements OnRefreshListener, On
         mRecyclerView.setAdapter(lAdapter);
         mRecyclerView.setRefreshing(true);
         mRecyclerView.setPullRefreshEnabled(false);
+
 
         getContent();
         //点击事件, 进入画廊
@@ -81,6 +92,7 @@ public class ShareActivity extends BaseActivity implements OnRefreshListener, On
                         super.onSuccess(favBeen, call, response);
                         shareAdapter.addData(favBeen);
                         lAdapter.notifyDataSetChanged();
+                        mLoadingView.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
 
@@ -89,6 +101,8 @@ public class ShareActivity extends BaseActivity implements OnRefreshListener, On
                         super.onError(call, response, e);
                         //错误处理
                         if (e.getMessage().equals("nodata")) {
+                            mLoadingView.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.GONE);
                             mView_empty.setVisibility(View.VISIBLE);
                         }
                     }

@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:fitsSystemWindows="true"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
-    <include layout="@layout/item_toolbar"/>
+    <include
+        android:id="@+id/item"
+        layout="@layout/item_toolbar"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_loadingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone">
+
+        <com.botu.img.ui.view.MetaballView
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
     <com.github.jdsjlzx.recyclerview.LRecyclerView
         android:id="@+id/lRecyclerView_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/item"
         android:visibility="gone"/>
 
-    <include layout="@layout/item_empty"/>
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ImageView
+            style="@style/WrapWrap"
+            android:layout_centerInParent="true"
+            android:background="@drawable/icon_no_data"/>
+    </RelativeLayout>
+</RelativeLayout>

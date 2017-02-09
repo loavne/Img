@@ -1,14 +1,17 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="colorPrimary">@color/colorPrimary</item>            <!-- 状态栏-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>    <!-- toolbar-->
+        <item name="colorAccent">@color/colorAccent</item>              <!-- 重点控件-->
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme.Base">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>  <!--这个一定要开，不然打开的时候 状态栏 会先灰色再变成背景-->
@@ -19,7 +22,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:button">@null</item>
-        <item name="android:drawablePadding">0dp</item>
+        <item name="android:drawablePadding">3dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/txt_tab_selector</item>
@@ -31,15 +34,13 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="Toolbar_Light_Style" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorControlNormal">@color/white</item>
-    </style>
 
     <style name="WrapMatch">
         <item name="android:layout_width">wrap_content</item>

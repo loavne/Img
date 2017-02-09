@@ -22,10 +22,10 @@ import com.botu.img.cache.ACache;
 import com.botu.img.ui.activity.FavouriteActivity;
 import com.botu.img.ui.activity.FootActivity;
 import com.botu.img.ui.activity.ShareActivity;
+import com.botu.img.ui.view.CircleImageView;
 import com.botu.img.utils.L;
 import com.botu.img.utils.SpUtils;
 import com.botu.img.utils.SystemUtils;
-import com.botu.sticklibrary.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -50,7 +50,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 import static com.botu.img.MyApp.mAuthInfo;
-import static com.botu.img.MyApp.mTencent;
+import static com.botu.img.MyApp.sTencent;
 import static com.botu.img.base.IConstants.SCOPE;
 
 
@@ -80,6 +80,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     private String mOpenID;
     private ACache mCache;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_person;
@@ -90,7 +91,6 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         mCache = ACache.get(mActivity);
         llLogin = (RelativeLayout) mActivity.findViewById(R.id.ll_login_from);
         mLlContent = (LinearLayout) mActivity.findViewById(R.id.ll_userinfo_content);
-
         mWx = (ImageView) mActivity.findViewById(R.id.iv_wx);
         mQq = (ImageView) mActivity.findViewById(R.id.iv_qq);
         mSina = (ImageView) mActivity.findViewById(R.id.iv_sina);
@@ -126,7 +126,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
             //登录则显示个人中心界面
             llLogin.setVisibility(View.GONE);
             mLlContent.setVisibility(View.VISIBLE);
-            Glide.with(mActivity).load(SpUtils.getString(mActivity, IConstants.header, "")).asBitmap().override(50,50).fitCenter().into(mIvHead); //头像
+            Glide.with(mActivity).load(SpUtils.getString(mActivity, IConstants.header, "")).fitCenter().into(mIvHead); //头像
             mTvName.setText(SpUtils.getString(mActivity, IConstants.username, ""));
         } else {
             //未登录则显示登录界面
@@ -138,8 +138,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onStop() {
         //注销登录,以便下次登录
-        if (mTencent != null) {
-            mTencent.logout(mActivity);
+        if (sTencent != null) {
+            sTencent.logout(mActivity);
         }
         super.onStop();
     }
@@ -203,12 +203,12 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
         loginListener = new LoginIUiListener();
         userInfoIUiListener = new UserInfoIUiListener();
 
-        if (mTencent == null) {
-            mTencent = Tencent.createInstance(IConstants.QQ_APP_ID, mActivity);
+        if (sTencent == null) {
+            sTencent = Tencent.createInstance(IConstants.QQ_APP_ID, mActivity);
         }
 
-        if (!mTencent.isSessionValid()) {
-            mTencent.login(mActivity, SCOPE, loginListener);
+        if (!sTencent.isSessionValid()) {
+            sTencent.login(mActivity, SCOPE, loginListener);
         }
     }
 
@@ -223,7 +223,7 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 if (resultCode == -1) {
                     Tencent.handleResultData(data, loginListener);
                     //获取用户信息
-                    UserInfo info = new UserInfo(mActivity, MyApp.mTencent.getQQToken());
+                    UserInfo info = new UserInfo(mActivity, MyApp.sTencent.getQQToken());
                     info.getUserInfo(userInfoIUiListener);
                 }
             }
@@ -300,8 +300,8 @@ public class PersonFragment extends BaseFragment implements View.OnClickListener
                 mOpenID = jo.getString("openid");
                 String accessToken = jo.getString("access_token");
                 String expires = jo.getString("expires_in");
-                mTencent.setOpenId(mOpenID);
-                mTencent.setAccessToken(accessToken, expires);
+                sTencent.setOpenId(mOpenID);
+                sTencent.setAccessToken(accessToken, expires);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

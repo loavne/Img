@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                android:fitsSystemWindows="true"
+        android:background="@drawable/guide_2">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_content"
@@ -12,11 +13,11 @@
     <Button
         android:id="@+id/bt_enter"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         android:background="@color/white"
-        android:layout_marginBottom="64dp"
         android:text="开始体验"
         android:textColor="@color/colorPrimary"
         android:visibility="gone"/>
@@ -27,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <ImageView

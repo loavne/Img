@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.botu.img.R;
 import com.botu.img.ui.fragment.BaseFragment;
 import com.botu.img.ui.fragment.FragmentFactory;
+import com.botu.img.ui.view.StatusBarUtil;
 
 
 /**
@@ -40,9 +41,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     protected void initView() {
-        setToolBar(getString(R.string.tab_home), R.color.gradient, false);
-
-
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 0);
+        setToolBar(getString(R.string.tab_home), false);
         radioGroup = (RadioGroup) findViewById(R.id.rg_tab_bottom);
         flContent = (FrameLayout) findViewById(R.id.fl_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

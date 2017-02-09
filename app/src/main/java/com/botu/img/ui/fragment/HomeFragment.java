@@ -12,6 +12,7 @@ import com.botu.img.cache.ACache;
 import com.botu.img.callback.JsonCallback;
 import com.botu.img.ui.activity.ListActivity;
 import com.botu.img.ui.adapter.ListAdapter;
+import com.botu.img.ui.view.MetaballView;
 import com.botu.img.utils.L;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -39,6 +40,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
     private LRecyclerViewAdapter lAdapter;
     private List<ListType> mList = new ArrayList<>();
     private ACache mACache;
+    private MetaballView mLoadingView;
 
     @Override
     protected int getLayoutId() {
@@ -47,6 +49,11 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
 
     @Override
     protected void initView() {
+        L.i("再次启动");
+
+        mLoadingView = (MetaballView) mActivity.findViewById(R.id.loadingView);
+        mLoadingView.setPaintMode(1);
+        mLoadingView.setVisibility(View.VISIBLE);
         mACache = ACache.get(mActivity);
         mRecyclerView = (LRecyclerView) mActivity.findViewById(R.id.lRecyclerView);
         mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 3));
@@ -70,6 +77,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
             //缓存的数据
             mAdapter.addData(mList);
             lAdapter.notifyDataSetChanged();
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mLoadingView.setVisibility(View.GONE);
         }
     }
 
@@ -87,6 +96,8 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
                         mACache.put("home_data", (Serializable) types, 2 * ACache.TIME_DAY);
                         mAdapter.addData(types);
                         lAdapter.notifyDataSetChanged();
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mLoadingView.setVisibility(View.GONE);
                     }
 
                     @Override

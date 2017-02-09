@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.botu.img.R;
 import com.botu.img.base.IConstants;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.DataCleanManager;
 import com.botu.img.utils.SpUtils;
 
@@ -28,12 +29,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView() {
-        setToolBar(getString(R.string.setting), R.color.gradient, true);
-
-        //添加一个PreferenceFragment
-//        mSettingFragment = new SettingFragment();
-//        FragmentManager fm = getFragmentManager();
-//        fm.beginTransaction().replace(R.id.fl_setting_content, mSettingFragment).commit();
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 0);
+        setToolBar(getString(R.string.setting), true);
         clearCache = (RelativeLayout) findViewById(R.id.rl_clear_cache);
         cacheSize = (TextView) findViewById(R.id.tv_cache_size);
         exit = (TextView) findViewById(R.id.tv_exit);

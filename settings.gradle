@@ -1,1 +1,1 @@
-include ':app', ':sticklibrary', ':weibosdk'
+include ':app', ':weibosdk'

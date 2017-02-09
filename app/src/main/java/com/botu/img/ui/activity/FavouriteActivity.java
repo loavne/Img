@@ -12,6 +12,8 @@ import com.botu.img.base.IConstants;
 import com.botu.img.bean.ImgType;
 import com.botu.img.callback.JsonCallback;
 import com.botu.img.ui.adapter.ImageAdapter;
+import com.botu.img.ui.view.MetaballView;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.SpUtils;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -42,6 +44,8 @@ public class FavouriteActivity extends BaseActivity implements OnLoadMoreListene
     private ImageAdapter favAdapter;
     List<ImgType> mDatas = new ArrayList<>();
 
+    private MetaballView mMetaballView;
+    private RelativeLayout mLoadingView;
     private int page = 1;
 
     @Override
@@ -51,9 +55,16 @@ public class FavouriteActivity extends BaseActivity implements OnLoadMoreListene
 
     @Override
     protected void initView() {
-        setToolBar(getString(R.string.favourite), R.color.gradient, true);
-        mView_empty = (RelativeLayout) findViewById(R.id.ll_empty);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.colorPrimary), 0);
+        setToolBar(getString(R.string.favourite),true);
+        mView_empty = (RelativeLayout) findViewById(R.id.rl_empty);
         mRecyclerView = (LRecyclerView) findViewById(R.id.lRecyclerView_list);
+        mLoadingView = (RelativeLayout) findViewById(R.id.rl_loadingView);
+        mMetaballView = (MetaballView) findViewById(R.id.loading);
+        mMetaballView.setPaintMode(1);
+        mLoadingView.setVisibility(View.VISIBLE);
+
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         favAdapter = new ImageAdapter(this, R.layout.list_item_news, mDatas);
@@ -84,12 +95,15 @@ public class FavouriteActivity extends BaseActivity implements OnLoadMoreListene
                         favAdapter.clear();
                         favAdapter.addData(favBeen);
                         lAdapter.notifyDataSetChanged();
+                        mLoadingView.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onError(Call call, Response response, Exception e) {
                         super.onError(call, response, e);
+                        mLoadingView.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.GONE);
                         mView_empty.setVisibility(View.VISIBLE);
                     }
                 });

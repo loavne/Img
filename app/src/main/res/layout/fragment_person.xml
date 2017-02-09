@@ -58,7 +58,7 @@
             android:layout_height="200dp"
             android:background="@drawable/icon_user_bg">
 
-            <com.botu.sticklibrary.view.CircleImageView
+            <com.botu.img.ui.view.CircleImageView
                 android:id="@+id/iv_head"
                 android:layout_width="100dp"
                 android:layout_height="100dp"

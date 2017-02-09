@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.botu.img.R;
+import com.botu.img.ui.view.StatusBarUtil;
 import com.botu.img.utils.SpUtils;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class GuideActivity extends BaseActivity implements ViewPager.OnPageChang
 
     @Override
     protected void initView() {
-
+        StatusBarUtil.setTranslucent(this, 0);
         mViewPager = (ViewPager) findViewById(R.id.vp_content);
         btEnter = (Button) findViewById(R.id.bt_enter);
         llDot = (LinearLayout) findViewById(R.id.ll_dot);
